@@ -1,0 +1,3 @@
+SECURITY AWARENESS TRAINING (synthetic)
+The company runs a mandatory security awareness training program annually.
+Per-employee sign-off is stored in the HR system and not attached here.

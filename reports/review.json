@@ -1,0 +1,508 @@
+{
+  "meta": {
+    "actor": "reviewer@example.com",
+    "generated_at": "2026-07-01T12:00:00Z",
+    "framing": "Policy/control evidence review — decision support for a human reviewer. NOT a certification of SOC 2, HIPAA, GDPR, or any framework.",
+    "evidence_count": 14,
+    "control_count": 11
+  },
+  "summary": {
+    "satisfied": 5,
+    "partial": 3,
+    "needs_review": 1,
+    "missing": 2
+  },
+  "controls": [
+    {
+      "control_id": "AC-2",
+      "title": "Account Management",
+      "verdict": "SATISFIED",
+      "confidence": 0.99,
+      "rationale": "Every requirement is supported by at least one evidence snippet.",
+      "matched_evidence_ids": [
+        "access-review-log",
+        "account-provisioning-policy"
+      ],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Documented account provisioning policy",
+          "met": true,
+          "matched_keywords": [
+            "account provisioning",
+            "onboarding",
+            "account creation policy"
+          ],
+          "matched_evidence_ids": [
+            "account-provisioning-policy"
+          ]
+        },
+        {
+          "name": "Evidence of periodic access review",
+          "met": true,
+          "matched_keywords": [
+            "access review",
+            "recertification",
+            "quarterly review"
+          ],
+          "matched_evidence_ids": [
+            "access-review-log"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "access-review-log",
+          "source": "access-review-log.txt",
+          "excerpt": "QUARTERLY ACCESS REVIEW LOG (synthetic) Q2 access review completed; recertification of all privileged accounts done. Reviewer contact: [REDACTED:EMAIL] source host [REDACTED:IP] Notes: 3 stale accounts removed during the quarterly review."
+        },
+        {
+          "evidence_id": "account-provisioning-policy",
+          "source": "account-provisioning-policy.txt",
+          "excerpt": "ACCOUNT PROVISIONING POLICY (synthetic sample — not real data) All new hires follow the account provisioning and onboarding workflow. Account creation policy requires manager approval before an identity is issued. Policy owner: ..."
+        }
+      ]
+    },
+    {
+      "control_id": "AU-6",
+      "title": "Audit Log Review",
+      "verdict": "SATISFIED",
+      "confidence": 0.99,
+      "rationale": "Every requirement is supported by at least one evidence snippet.",
+      "matched_evidence_ids": [
+        "log-review-notes",
+        "logging-config"
+      ],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Centralized log collection",
+          "met": true,
+          "matched_keywords": [
+            "centralized logging",
+            "log aggregation",
+            "syslog"
+          ],
+          "matched_evidence_ids": [
+            "logging-config"
+          ]
+        },
+        {
+          "name": "Evidence of log review cadence",
+          "met": true,
+          "matched_keywords": [
+            "log review",
+            "reviewed logs"
+          ],
+          "matched_evidence_ids": [
+            "log-review-notes"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "log-review-notes",
+          "source": "log-review-notes.txt",
+          "excerpt": "WEEKLY LOG REVIEW NOTES (synthetic) Security team performed the weekly log review on schedule. Reviewed logs for anomalous auth events; nothing actionable found."
+        },
+        {
+          "evidence_id": "logging-config",
+          "source": "logging-config.conf",
+          "excerpt": "# Centralized logging configuration (synthetic) # Ships logs via syslog to the log aggregation cluster. destination centralized_logging { tcp(\"[REDACTED:IP]\" port(514)); }; api_key=[REDACTED:SECRET]"
+        }
+      ]
+    },
+    {
+      "control_id": "CP-9",
+      "title": "Information Backup",
+      "verdict": "PARTIAL",
+      "confidence": 0.55,
+      "rationale": "1/2 requirements met. Unmet: ['Evidence of restore testing']. Treated as a partial gap.",
+      "matched_evidence_ids": [
+        "backup-policy"
+      ],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Documented backup schedule",
+          "met": true,
+          "matched_keywords": [
+            "backup policy",
+            "backup schedule",
+            "nightly backup"
+          ],
+          "matched_evidence_ids": [
+            "backup-policy"
+          ]
+        },
+        {
+          "name": "Evidence of restore testing",
+          "met": false,
+          "matched_keywords": [],
+          "matched_evidence_ids": []
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "backup-policy",
+          "source": "backup-policy.txt",
+          "excerpt": "BACKUP POLICY (synthetic) A nightly backup runs per the documented backup schedule and backup policy. Retention is 30 days. Periodic recovery drills are planned for next quarter."
+        }
+      ]
+    },
+    {
+      "control_id": "IA-5",
+      "title": "Authenticator Management",
+      "verdict": "SATISFIED",
+      "confidence": 0.99,
+      "rationale": "Every requirement is supported by at least one evidence snippet.",
+      "matched_evidence_ids": [
+        "mfa-config",
+        "password-policy"
+      ],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "MFA enforced",
+          "met": true,
+          "matched_keywords": [
+            "multi-factor",
+            "mfa",
+            "two-factor"
+          ],
+          "matched_evidence_ids": [
+            "mfa-config"
+          ]
+        },
+        {
+          "name": "Password policy defined",
+          "met": true,
+          "matched_keywords": [
+            "password policy",
+            "minimum length",
+            "complexity requirement"
+          ],
+          "matched_evidence_ids": [
+            "password-policy"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "mfa-config",
+          "source": "mfa-config.txt",
+          "excerpt": "AUTHENTICATION CONFIG (synthetic) multi-factor authentication (mfa) is enforced for all admin logins. Two-factor via TOTP. Enrollment token=[REDACTED:SECRET] for the seed script."
+        },
+        {
+          "evidence_id": "password-policy",
+          "source": "password-policy.md",
+          "excerpt": "# Password Policy (synthetic) The password policy sets a minimum length of 14 characters and a complexity requirement (upper, lower, digit, symbol)."
+        }
+      ]
+    },
+    {
+      "control_id": "IR-4",
+      "title": "Incident Handling",
+      "verdict": "NEEDS_REVIEW",
+      "confidence": 0.6,
+      "rationale": "All requirements matched, but evidence contains review-flag term(s) ['todo'] that require a human decision.",
+      "matched_evidence_ids": [
+        "incident-response-plan",
+        "incident-ticket-INC-2043"
+      ],
+      "review_flags_hit": [
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Incident response plan",
+          "met": true,
+          "matched_keywords": [
+            "incident response plan",
+            "response playbook"
+          ],
+          "matched_evidence_ids": [
+            "incident-response-plan"
+          ]
+        },
+        {
+          "name": "Evidence of incident handling",
+          "met": true,
+          "matched_keywords": [
+            "incident ticket",
+            "postmortem",
+            "incident report"
+          ],
+          "matched_evidence_ids": [
+            "incident-ticket-INC-2043"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "incident-response-plan",
+          "source": "incident-response-plan.md",
+          "excerpt": "# Incident Response Plan (synthetic) This incident response plan defines severity tiers and the response playbook for containment, eradication, and recovery."
+        },
+        {
+          "evidence_id": "incident-ticket-INC-2043",
+          "source": "incident-ticket-INC-2043.txt",
+          "excerpt": "INCIDENT TICKET INC-2043 (synthetic) Type: suspicious login. An incident ticket was opened and a postmortem written. Reporter: [REDACTED:EMAIL] from [REDACTED:IP] TODO: finalize root-cause section and attach the incident report exhibits."
+        }
+      ]
+    },
+    {
+      "control_id": "RA-5",
+      "title": "Vulnerability Scanning",
+      "verdict": "PARTIAL",
+      "confidence": 0.55,
+      "rationale": "1/2 requirements met. Unmet: ['Evidence of remediation']. Treated as a partial gap.",
+      "matched_evidence_ids": [
+        "vuln-scan-report"
+      ],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Scanning performed on a schedule",
+          "met": true,
+          "matched_keywords": [
+            "vulnerability scan",
+            "scan schedule"
+          ],
+          "matched_evidence_ids": [
+            "vuln-scan-report"
+          ]
+        },
+        {
+          "name": "Evidence of remediation",
+          "met": false,
+          "matched_keywords": [],
+          "matched_evidence_ids": []
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "vuln-scan-report",
+          "source": "vuln-scan-report.txt",
+          "excerpt": "VULNERABILITY SCAN REPORT (synthetic) Weekly vulnerability scan ran per the scan schedule; 12 findings logged. Fixes are tracked by the platform team in a separate system."
+        }
+      ]
+    },
+    {
+      "control_id": "SC-13",
+      "title": "Cryptographic Protection",
+      "verdict": "SATISFIED",
+      "confidence": 0.99,
+      "rationale": "Every requirement is supported by at least one evidence snippet.",
+      "matched_evidence_ids": [
+        "encryption-standard"
+      ],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Encryption at rest",
+          "met": true,
+          "matched_keywords": [
+            "encryption at rest",
+            "aes-256"
+          ],
+          "matched_evidence_ids": [
+            "encryption-standard"
+          ]
+        },
+        {
+          "name": "Encryption in transit",
+          "met": true,
+          "matched_keywords": [
+            "in transit",
+            "tls",
+            "https"
+          ],
+          "matched_evidence_ids": [
+            "encryption-standard"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "encryption-standard",
+          "source": "encryption-standard.md",
+          "excerpt": "# Encryption Standard (synthetic) Data uses encryption at rest with aes-256 on encrypted volumes. Data in transit is protected with tls 1.2+ (https only). Service auth header example: [REDACTED:BEARER]"
+        }
+      ]
+    },
+    {
+      "control_id": "SI-2",
+      "title": "Flaw Remediation (Patching)",
+      "verdict": "SATISFIED",
+      "confidence": 0.99,
+      "rationale": "Every requirement is supported by at least one evidence snippet.",
+      "matched_evidence_ids": [
+        "patch-log-june",
+        "patch-management-policy"
+      ],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Patch management policy",
+          "met": true,
+          "matched_keywords": [
+            "patch management",
+            "patching policy",
+            "patch cadence"
+          ],
+          "matched_evidence_ids": [
+            "patch-management-policy"
+          ]
+        },
+        {
+          "name": "Evidence of patches applied",
+          "met": true,
+          "matched_keywords": [
+            "patch applied",
+            "updates installed",
+            "patch log"
+          ],
+          "matched_evidence_ids": [
+            "patch-log-june"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "patch-log-june",
+          "source": "patch-log-june.txt",
+          "excerpt": "PATCH LOG - JUNE (synthetic) patch applied to 42 hosts; security updates installed successfully. Deployment host [REDACTED:IP] completed the patch log without error."
+        },
+        {
+          "evidence_id": "patch-management-policy",
+          "source": "patch-management-policy.txt",
+          "excerpt": "PATCH MANAGEMENT POLICY (synthetic) The patch management program defines a monthly patch cadence and patching policy for all production hosts."
+        }
+      ]
+    },
+    {
+      "control_id": "AT-2",
+      "title": "Security Awareness Training",
+      "verdict": "PARTIAL",
+      "confidence": 0.55,
+      "rationale": "1/2 requirements met. Unmet: ['Completion records']. Treated as a partial gap.",
+      "matched_evidence_ids": [
+        "security-awareness-training"
+      ],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Training program defined",
+          "met": true,
+          "matched_keywords": [
+            "security awareness training",
+            "training program"
+          ],
+          "matched_evidence_ids": [
+            "security-awareness-training"
+          ]
+        },
+        {
+          "name": "Completion records",
+          "met": false,
+          "matched_keywords": [],
+          "matched_evidence_ids": []
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "security-awareness-training",
+          "source": "security-awareness-training.txt",
+          "excerpt": "SECURITY AWARENESS TRAINING (synthetic) The company runs a mandatory security awareness training program annually. Per-employee sign-off is stored in the HR system and not attached here."
+        }
+      ]
+    },
+    {
+      "control_id": "PS-4",
+      "title": "Personnel Termination",
+      "verdict": "MISSING",
+      "confidence": 0.9,
+      "rationale": "No supplied evidence matched any requirement of this control.",
+      "matched_evidence_ids": [],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Offboarding process",
+          "met": false,
+          "matched_keywords": [],
+          "matched_evidence_ids": []
+        },
+        {
+          "name": "Termination records",
+          "met": false,
+          "matched_keywords": [],
+          "matched_evidence_ids": []
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "control_id": "PE-3",
+      "title": "Physical Access Control",
+      "verdict": "MISSING",
+      "confidence": 0.9,
+      "rationale": "No supplied evidence matched any requirement of this control.",
+      "matched_evidence_ids": [],
+      "review_flags_hit": [],
+      "requirements": [
+        {
+          "name": "Badge access control",
+          "met": false,
+          "matched_keywords": [],
+          "matched_evidence_ids": []
+        },
+        {
+          "name": "Visitor logging",
+          "met": false,
+          "matched_keywords": [],
+          "matched_evidence_ids": []
+        }
+      ],
+      "evidence": []
+    }
+  ],
+  "gaps": [
+    {
+      "control_id": "CP-9",
+      "title": "Information Backup",
+      "verdict": "PARTIAL",
+      "rationale": "1/2 requirements met. Unmet: ['Evidence of restore testing']. Treated as a partial gap."
+    },
+    {
+      "control_id": "IR-4",
+      "title": "Incident Handling",
+      "verdict": "NEEDS_REVIEW",
+      "rationale": "All requirements matched, but evidence contains review-flag term(s) ['todo'] that require a human decision."
+    },
+    {
+      "control_id": "RA-5",
+      "title": "Vulnerability Scanning",
+      "verdict": "PARTIAL",
+      "rationale": "1/2 requirements met. Unmet: ['Evidence of remediation']. Treated as a partial gap."
+    },
+    {
+      "control_id": "AT-2",
+      "title": "Security Awareness Training",
+      "verdict": "PARTIAL",
+      "rationale": "1/2 requirements met. Unmet: ['Completion records']. Treated as a partial gap."
+    },
+    {
+      "control_id": "PS-4",
+      "title": "Personnel Termination",
+      "verdict": "MISSING",
+      "rationale": "No supplied evidence matched any requirement of this control."
+    },
+    {
+      "control_id": "PE-3",
+      "title": "Physical Access Control",
+      "verdict": "MISSING",
+      "rationale": "No supplied evidence matched any requirement of this control."
+    }
+  ]
+}

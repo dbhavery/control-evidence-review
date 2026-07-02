@@ -1,0 +1,3 @@
+AUTHENTICATION CONFIG (synthetic)
+multi-factor authentication (mfa) is enforced for all admin logins.
+Two-factor via TOTP. Enrollment token=AKIAIOSFODNN7EXAMPLE for the seed script.

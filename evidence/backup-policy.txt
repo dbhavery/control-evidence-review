@@ -1,0 +1,3 @@
+BACKUP POLICY (synthetic)
+A nightly backup runs per the documented backup schedule and backup policy.
+Retention is 30 days. Periodic recovery drills are planned for next quarter.

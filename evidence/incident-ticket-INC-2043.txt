@@ -1,0 +1,4 @@
+INCIDENT TICKET INC-2043 (synthetic)
+Type: suspicious login. An incident ticket was opened and a postmortem written.
+Reporter: secops@example.com from 192.168.1.100
+TODO: finalize root-cause section and attach the incident report exhibits.

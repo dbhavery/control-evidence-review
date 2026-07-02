@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install (dev extras)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run test suite
+        run: python -m pytest -q
+
+      - name: Run a sample review (deterministic clock)
+        run: |
+          python -m cer.cli review \
+            --catalog controls/catalog.json \
+            --evidence evidence \
+            --out reports \
+            --actor ci@example.com \
+            --clock 2026-07-01T12:00:00Z
+
+      - name: Verify no synthetic secrets leaked into the report
+        run: |
+          if grep -REq "sk_live_|AKIAIOSFODNN7EXAMPLE|alice.admin@example.com" reports/; then
+            echo "Secret leaked into a generated report!"
+            exit 1
+          fi
+          echo "Redaction check passed."
+
+      - name: Upload review artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-report-py${{ matrix.python-version }}
+          path: reports/

@@ -1,0 +1,20 @@
+Control Evidence Review — decision support, NOT certification
+============================================================
+[OK ] AC-2   SATISFIED    conf=0.99  evidence=access-review-log,account-provisioning-policy
+[OK ] AU-6   SATISFIED    conf=0.99  evidence=log-review-notes,logging-config
+[~~ ] CP-9   PARTIAL      conf=0.55  evidence=backup-policy
+[OK ] IA-5   SATISFIED    conf=0.99  evidence=mfa-config,password-policy
+[?? ] IR-4   NEEDS_REVIEW conf=0.60  evidence=incident-response-plan,incident-ticket-INC-2043
+[~~ ] RA-5   PARTIAL      conf=0.55  evidence=vuln-scan-report
+[OK ] SC-13  SATISFIED    conf=0.99  evidence=encryption-standard
+[OK ] SI-2   SATISFIED    conf=0.99  evidence=patch-log-june,patch-management-policy
+[~~ ] AT-2   PARTIAL      conf=0.55  evidence=security-awareness-training
+[XX ] PS-4   MISSING      conf=0.90  evidence=-
+[XX ] PE-3   MISSING      conf=0.90  evidence=-
+------------------------------------------------------------
+SUMMARY  satisfied=5  partial=3  needs_review=1  missing=2
+GAPS (6): CP-9, IR-4, RA-5, AT-2, PS-4, PE-3
+------------------------------------------------------------
+JSON report : reports\review.json
+HTML report : reports\review.html
+Audit log   : reports\audit.jsonl

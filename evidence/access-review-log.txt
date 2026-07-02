@@ -1,0 +1,4 @@
+QUARTERLY ACCESS REVIEW LOG (synthetic)
+Q2 access review completed; recertification of all privileged accounts done.
+Reviewer contact: ops@corp.example  source host 10.42.13.7
+Notes: 3 stale accounts removed during the quarterly review.

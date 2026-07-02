@@ -1,0 +1,3 @@
+PATCH MANAGEMENT POLICY (synthetic)
+The patch management program defines a monthly patch cadence and patching policy
+for all production hosts.

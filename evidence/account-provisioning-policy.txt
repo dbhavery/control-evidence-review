@@ -1,0 +1,4 @@
+ACCOUNT PROVISIONING POLICY (synthetic sample — not real data)
+All new hires follow the account provisioning and onboarding workflow.
+Account creation policy requires manager approval before an identity is issued.
+Policy owner: alice.admin@example.com

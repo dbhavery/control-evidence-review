@@ -1,0 +1,52 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\dbhav\Projects\control-evidence-review
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.4.0, timeout-2.4.0, typeguard-4.5.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 40 items
+
+tests/test_audit.py::test_append_only_accumulates PASSED                 [  2%]
+tests/test_audit.py::test_deterministic_timestamp PASSED                 [  5%]
+tests/test_audit.py::test_every_record_has_schema PASSED                 [  7%]
+tests/test_audit.py::test_each_line_is_standalone_json PASSED            [ 10%]
+tests/test_audit.py::test_validate_record_rejects_bad_verdict PASSED     [ 12%]
+tests/test_engine.py::test_all_requirements_met_is_satisfied PASSED      [ 15%]
+tests/test_engine.py::test_some_requirements_met_is_partial PASSED       [ 17%]
+tests/test_engine.py::test_no_requirements_met_is_missing PASSED         [ 20%]
+tests/test_engine.py::test_missing_evidence_does_not_crash_and_is_gap PASSED [ 22%]
+tests/test_engine.py::test_review_flag_forces_needs_review PASSED        [ 25%]
+tests/test_engine.py::test_control_with_no_requirements_needs_review PASSED [ 27%]
+tests/test_engine.py::test_min_hits_threshold_not_reached_is_unmet PASSED [ 30%]
+tests/test_engine.py::test_full_catalog_expected_distribution PASSED     [ 32%]
+tests/test_loaders.py::test_catalog_loads_all_controls PASSED            [ 35%]
+tests/test_loaders.py::test_catalog_rejects_duplicate_ids PASSED         [ 37%]
+tests/test_loaders.py::test_evidence_loads_directory PASSED              [ 40%]
+tests/test_loaders.py::test_evidence_missing_dir_raises PASSED           [ 42%]
+tests/test_loaders.py::test_cli_review_end_to_end PASSED                 [ 45%]
+tests/test_loaders.py::test_cli_bad_catalog_returns_error_code PASSED    [ 47%]
+tests/test_matcher.py::test_normalize_collapses_punctuation PASSED       [ 50%]
+tests/test_matcher.py::test_phrase_match_is_case_insensitive PASSED      [ 52%]
+tests/test_matcher.py::test_word_boundary_prevents_substring_match PASSED [ 55%]
+tests/test_matcher.py::test_stemming_matches_inflections PASSED          [ 57%]
+tests/test_matcher.py::test_no_match_returns_empty PASSED                [ 60%]
+tests/test_matcher.py::test_multiple_snippets_return_all_hits PASSED     [ 62%]
+tests/test_redaction.py::test_email_is_masked PASSED                     [ 65%]
+tests/test_redaction.py::test_ipv4_is_masked PASSED                      [ 67%]
+tests/test_redaction.py::test_secret_assignment_value_is_masked_key_kept PASSED [ 70%]
+tests/test_redaction.py::test_bearer_token_is_masked PASSED              [ 72%]
+tests/test_redaction.py::test_aws_key_is_masked PASSED                   [ 75%]
+tests/test_redaction.py::test_multiple_secrets_counted PASSED            [ 77%]
+tests/test_redaction.py::test_clean_text_unchanged PASSED                [ 80%]
+tests/test_redaction.py::test_redact_text_wrapper_returns_string PASSED  [ 82%]
+tests/test_report.py::test_report_summary_counts PASSED                  [ 85%]
+tests/test_report.py::test_gaps_list_contains_non_satisfied PASSED       [ 87%]
+tests/test_report.py::test_json_roundtrips PASSED                        [ 90%]
+tests/test_report.py::test_report_excerpts_are_redacted PASSED           [ 92%]
+tests/test_report.py::test_html_is_wellformed_and_selfcontained PASSED   [ 95%]
+tests/test_report.py::test_html_shows_verdicts_and_disclaimer PASSED     [ 97%]
+tests/test_report.py::test_write_html_creates_file PASSED                [100%]
+
+============================= 40 passed in 0.27s ==============================

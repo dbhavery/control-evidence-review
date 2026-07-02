@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control Evidence Review</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0d1117; color:#c9d1d9;
+    font:15px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  .disclaimer { background:#161b22; border:1px solid #30363d; border-left:3px solid #58a6ff;
+    padding:12px 16px; border-radius:6px; color:#8b949e; font-size:13px; margin:16px 0 24px; }
+  .meta { color:#8b949e; font-size:13px; margin-bottom:20px; }
+  .meta code { color:#c9d1d9; }
+  .stats { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+  .stat { flex:1; min-width:120px; background:#161b22; border:1px solid #30363d;
+    border-top-width:3px; border-radius:6px; padding:14px 16px; }
+  .stat .num { font-size:30px; font-weight:700; }
+  .stat .lbl { color:#8b949e; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .barwrap { display:flex; height:10px; border-radius:5px; overflow:hidden; margin:8px 0 32px;
+    border:1px solid #30363d; }
+  .seg { height:100%; }
+  h2 { font-size:16px; margin:28px 0 12px; color:#e6edf3; border-bottom:1px solid #21262d; padding-bottom:6px; }
+  .control { background:#161b22; border:1px solid #30363d; border-radius:8px;
+    padding:16px 18px; margin-bottom:14px; }
+  .chead { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .cid { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; color:#58a6ff; font-weight:700; }
+  .ctitle { font-weight:600; flex:1; }
+  .badge { color:#0d1117; font-weight:700; font-size:11px; padding:3px 8px; border-radius:12px; letter-spacing:.03em; }
+  .conf { color:#8b949e; font-size:12px; font-family:ui-monospace,monospace; }
+  .rationale { color:#8b949e; font-size:13px; margin:8px 0; }
+  .flags { color:#d29922; font-size:12px; margin:6px 0; }
+  ul.reqs { list-style:none; margin:10px 0; padding:0; font-size:13px; }
+  ul.reqs li { padding:2px 0; }
+  ul.reqs li.met { color:#3fb950; }
+  ul.reqs li.unmet { color:#f85149; }
+  .kw { color:#8b949e; font-family:ui-monospace,monospace; font-size:11px; }
+  .evidence { margin-top:8px; }
+  .ev { background:#0d1117; border:1px solid #21262d; border-radius:6px;
+    padding:8px 10px; margin:6px 0; font-size:12px; }
+  .ev.none { color:#8b949e; font-style:italic; }
+  .evid { display:inline-block; font-family:ui-monospace,monospace; color:#58a6ff;
+    margin-right:8px; }
+  .evtext { color:#adbac7; }
+  table { width:100%; border-collapse:collapse; font-size:13px; background:#161b22;
+    border:1px solid #30363d; border-radius:8px; overflow:hidden; }
+  th, td { text-align:left; padding:9px 12px; border-bottom:1px solid #21262d; vertical-align:top; }
+  th { color:#8b949e; font-size:11px; text-transform:uppercase; letter-spacing:.04em; }
+  td.mono { font-family:ui-monospace,monospace; color:#58a6ff; }
+  .gv { font-weight:700; }
+  .none { color:#8b949e; font-style:italic; text-align:center; }
+  footer { color:#484f58; font-size:12px; margin-top:36px; text-align:center; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Control Evidence Review</h1>
+    <div class="disclaimer">Policy/control evidence review — decision support for a human reviewer. NOT a certification of SOC 2, HIPAA, GDPR, or any framework.</div>
+    <div class="meta">
+      Reviewer: <code>reviewer@example.com</code> &middot;
+      Generated: <code>2026-07-01T12:00:00Z</code> &middot;
+      Controls: <code>11</code> &middot;
+      Evidence snippets: <code>14</code>
+    </div>
+    <div class="stats"><div class="stat" style="border-color:#3fb950"><div class="num" style="color:#3fb950">5</div><div class="lbl">Satisfied</div></div><div class="stat" style="border-color:#d29922"><div class="num" style="color:#d29922">3</div><div class="lbl">Partial</div></div><div class="stat" style="border-color:#58a6ff"><div class="num" style="color:#58a6ff">1</div><div class="lbl">Needs review</div></div><div class="stat" style="border-color:#f85149"><div class="num" style="color:#f85149">2</div><div class="lbl">Missing</div></div></div>
+    <div class="barwrap"><div class="seg" style="width:45.45%;background:#3fb950" title="satisfied: 5"></div><div class="seg" style="width:27.27%;background:#d29922" title="partial: 3"></div><div class="seg" style="width:9.09%;background:#58a6ff" title="needs_review: 1"></div><div class="seg" style="width:18.18%;background:#f85149" title="missing: 2"></div></div>
+
+    <h2>Controls</h2>
+    
+      <div class="control">
+        <div class="chead">
+          <span class="cid">AC-2</span>
+          <span class="ctitle">Account Management</span>
+          <span class="badge" style="background:#3fb950">SATISFIED</span>
+          <span class="conf">conf 0.99</span>
+        </div>
+        <div class="rationale">Every requirement is supported by at least one evidence snippet.</div>
+        
+        <ul class="reqs"><li class="met">✓ Documented account provisioning policy <span class="kw">[account provisioning, onboarding, account creation policy]</span></li><li class="met">✓ Evidence of periodic access review <span class="kw">[access review, recertification, quarterly review]</span></li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">access-review-log</span><span class="evtext">QUARTERLY ACCESS REVIEW LOG (synthetic) Q2 access review completed; recertification of all privileged accounts done. Reviewer contact: [REDACTED:EMAIL] source host [REDACTED:IP] Notes: 3 stale accounts removed during the quarterly review.</span></div><div class="ev"><span class="evid">account-provisioning-policy</span><span class="evtext">ACCOUNT PROVISIONING POLICY (synthetic sample — not real data) All new hires follow the account provisioning and onboarding workflow. Account creation policy requires manager approval before an identity is issued. Policy owner: ...</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">AU-6</span>
+          <span class="ctitle">Audit Log Review</span>
+          <span class="badge" style="background:#3fb950">SATISFIED</span>
+          <span class="conf">conf 0.99</span>
+        </div>
+        <div class="rationale">Every requirement is supported by at least one evidence snippet.</div>
+        
+        <ul class="reqs"><li class="met">✓ Centralized log collection <span class="kw">[centralized logging, log aggregation, syslog]</span></li><li class="met">✓ Evidence of log review cadence <span class="kw">[log review, reviewed logs]</span></li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">log-review-notes</span><span class="evtext">WEEKLY LOG REVIEW NOTES (synthetic) Security team performed the weekly log review on schedule. Reviewed logs for anomalous auth events; nothing actionable found.</span></div><div class="ev"><span class="evid">logging-config</span><span class="evtext"># Centralized logging configuration (synthetic) # Ships logs via syslog to the log aggregation cluster. destination centralized_logging { tcp(&quot;[REDACTED:IP]&quot; port(514)); }; api_key=[REDACTED:SECRET]</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">IA-5</span>
+          <span class="ctitle">Authenticator Management</span>
+          <span class="badge" style="background:#3fb950">SATISFIED</span>
+          <span class="conf">conf 0.99</span>
+        </div>
+        <div class="rationale">Every requirement is supported by at least one evidence snippet.</div>
+        
+        <ul class="reqs"><li class="met">✓ MFA enforced <span class="kw">[multi-factor, mfa, two-factor]</span></li><li class="met">✓ Password policy defined <span class="kw">[password policy, minimum length, complexity requirement]</span></li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">mfa-config</span><span class="evtext">AUTHENTICATION CONFIG (synthetic) multi-factor authentication (mfa) is enforced for all admin logins. Two-factor via TOTP. Enrollment token=[REDACTED:SECRET] for the seed script.</span></div><div class="ev"><span class="evid">password-policy</span><span class="evtext"># Password Policy (synthetic) The password policy sets a minimum length of 14 characters and a complexity requirement (upper, lower, digit, symbol).</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">SC-13</span>
+          <span class="ctitle">Cryptographic Protection</span>
+          <span class="badge" style="background:#3fb950">SATISFIED</span>
+          <span class="conf">conf 0.99</span>
+        </div>
+        <div class="rationale">Every requirement is supported by at least one evidence snippet.</div>
+        
+        <ul class="reqs"><li class="met">✓ Encryption at rest <span class="kw">[encryption at rest, aes-256]</span></li><li class="met">✓ Encryption in transit <span class="kw">[in transit, tls, https]</span></li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">encryption-standard</span><span class="evtext"># Encryption Standard (synthetic) Data uses encryption at rest with aes-256 on encrypted volumes. Data in transit is protected with tls 1.2+ (https only). Service auth header example: [REDACTED:BEARER]</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">SI-2</span>
+          <span class="ctitle">Flaw Remediation (Patching)</span>
+          <span class="badge" style="background:#3fb950">SATISFIED</span>
+          <span class="conf">conf 0.99</span>
+        </div>
+        <div class="rationale">Every requirement is supported by at least one evidence snippet.</div>
+        
+        <ul class="reqs"><li class="met">✓ Patch management policy <span class="kw">[patch management, patching policy, patch cadence]</span></li><li class="met">✓ Evidence of patches applied <span class="kw">[patch applied, updates installed, patch log]</span></li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">patch-log-june</span><span class="evtext">PATCH LOG - JUNE (synthetic) patch applied to 42 hosts; security updates installed successfully. Deployment host [REDACTED:IP] completed the patch log without error.</span></div><div class="ev"><span class="evid">patch-management-policy</span><span class="evtext">PATCH MANAGEMENT POLICY (synthetic) The patch management program defines a monthly patch cadence and patching policy for all production hosts.</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">CP-9</span>
+          <span class="ctitle">Information Backup</span>
+          <span class="badge" style="background:#d29922">PARTIAL</span>
+          <span class="conf">conf 0.55</span>
+        </div>
+        <div class="rationale">1/2 requirements met. Unmet: [&#x27;Evidence of restore testing&#x27;]. Treated as a partial gap.</div>
+        
+        <ul class="reqs"><li class="met">✓ Documented backup schedule <span class="kw">[backup policy, backup schedule, nightly backup]</span></li><li class="unmet">✗ Evidence of restore testing</li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">backup-policy</span><span class="evtext">BACKUP POLICY (synthetic) A nightly backup runs per the documented backup schedule and backup policy. Retention is 30 days. Periodic recovery drills are planned for next quarter.</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">RA-5</span>
+          <span class="ctitle">Vulnerability Scanning</span>
+          <span class="badge" style="background:#d29922">PARTIAL</span>
+          <span class="conf">conf 0.55</span>
+        </div>
+        <div class="rationale">1/2 requirements met. Unmet: [&#x27;Evidence of remediation&#x27;]. Treated as a partial gap.</div>
+        
+        <ul class="reqs"><li class="met">✓ Scanning performed on a schedule <span class="kw">[vulnerability scan, scan schedule]</span></li><li class="unmet">✗ Evidence of remediation</li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">vuln-scan-report</span><span class="evtext">VULNERABILITY SCAN REPORT (synthetic) Weekly vulnerability scan ran per the scan schedule; 12 findings logged. Fixes are tracked by the platform team in a separate system.</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">AT-2</span>
+          <span class="ctitle">Security Awareness Training</span>
+          <span class="badge" style="background:#d29922">PARTIAL</span>
+          <span class="conf">conf 0.55</span>
+        </div>
+        <div class="rationale">1/2 requirements met. Unmet: [&#x27;Completion records&#x27;]. Treated as a partial gap.</div>
+        
+        <ul class="reqs"><li class="met">✓ Training program defined <span class="kw">[security awareness training, training program]</span></li><li class="unmet">✗ Completion records</li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">security-awareness-training</span><span class="evtext">SECURITY AWARENESS TRAINING (synthetic) The company runs a mandatory security awareness training program annually. Per-employee sign-off is stored in the HR system and not attached here.</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">IR-4</span>
+          <span class="ctitle">Incident Handling</span>
+          <span class="badge" style="background:#58a6ff">NEEDS_REVIEW</span>
+          <span class="conf">conf 0.60</span>
+        </div>
+        <div class="rationale">All requirements matched, but evidence contains review-flag term(s) [&#x27;todo&#x27;] that require a human decision.</div>
+        <div class="flags">Review flags: todo</div>
+        <ul class="reqs"><li class="met">✓ Incident response plan <span class="kw">[incident response plan, response playbook]</span></li><li class="met">✓ Evidence of incident handling <span class="kw">[incident ticket, postmortem, incident report]</span></li></ul>
+        <div class="evidence"><div class="ev"><span class="evid">incident-response-plan</span><span class="evtext"># Incident Response Plan (synthetic) This incident response plan defines severity tiers and the response playbook for containment, eradication, and recovery.</span></div><div class="ev"><span class="evid">incident-ticket-INC-2043</span><span class="evtext">INCIDENT TICKET INC-2043 (synthetic) Type: suspicious login. An incident ticket was opened and a postmortem written. Reporter: [REDACTED:EMAIL] from [REDACTED:IP] TODO: finalize root-cause section and attach the incident report exhibits.</span></div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">PS-4</span>
+          <span class="ctitle">Personnel Termination</span>
+          <span class="badge" style="background:#f85149">MISSING</span>
+          <span class="conf">conf 0.90</span>
+        </div>
+        <div class="rationale">No supplied evidence matched any requirement of this control.</div>
+        
+        <ul class="reqs"><li class="unmet">✗ Offboarding process</li><li class="unmet">✗ Termination records</li></ul>
+        <div class="evidence"><div class="ev none">No matching evidence supplied.</div></div>
+      </div>
+      <div class="control">
+        <div class="chead">
+          <span class="cid">PE-3</span>
+          <span class="ctitle">Physical Access Control</span>
+          <span class="badge" style="background:#f85149">MISSING</span>
+          <span class="conf">conf 0.90</span>
+        </div>
+        <div class="rationale">No supplied evidence matched any requirement of this control.</div>
+        
+        <ul class="reqs"><li class="unmet">✗ Badge access control</li><li class="unmet">✗ Visitor logging</li></ul>
+        <div class="evidence"><div class="ev none">No matching evidence supplied.</div></div>
+      </div>
+
+    <h2>Gaps &mdash; reviewer worklist</h2>
+    <table>
+      <tr><th>Control</th><th>Title</th><th>Verdict</th><th>Rationale</th></tr>
+      <tr><td class="mono">CP-9</td><td>Information Backup</td><td><span class="gv" style="color:#d29922">PARTIAL</span></td><td>1/2 requirements met. Unmet: [&#x27;Evidence of restore testing&#x27;]. Treated as a partial gap.</td></tr><tr><td class="mono">IR-4</td><td>Incident Handling</td><td><span class="gv" style="color:#58a6ff">NEEDS_REVIEW</span></td><td>All requirements matched, but evidence contains review-flag term(s) [&#x27;todo&#x27;] that require a human decision.</td></tr><tr><td class="mono">RA-5</td><td>Vulnerability Scanning</td><td><span class="gv" style="color:#d29922">PARTIAL</span></td><td>1/2 requirements met. Unmet: [&#x27;Evidence of remediation&#x27;]. Treated as a partial gap.</td></tr><tr><td class="mono">AT-2</td><td>Security Awareness Training</td><td><span class="gv" style="color:#d29922">PARTIAL</span></td><td>1/2 requirements met. Unmet: [&#x27;Completion records&#x27;]. Treated as a partial gap.</td></tr><tr><td class="mono">PS-4</td><td>Personnel Termination</td><td><span class="gv" style="color:#f85149">MISSING</span></td><td>No supplied evidence matched any requirement of this control.</td></tr><tr><td class="mono">PE-3</td><td>Physical Access Control</td><td><span class="gv" style="color:#f85149">MISSING</span></td><td>No supplied evidence matched any requirement of this control.</td></tr>
+    </table>
+
+    <footer>Generated by control-evidence-review &middot; evidence excerpts redacted &middot; decision support only</footer>
+  </div>
+</body>
+</html>

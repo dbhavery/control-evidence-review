@@ -1,0 +1,3 @@
+VULNERABILITY SCAN REPORT (synthetic)
+Weekly vulnerability scan ran per the scan schedule; 12 findings logged.
+Fixes are tracked by the platform team in a separate system.

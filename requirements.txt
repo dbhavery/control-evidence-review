@@ -1,0 +1,6 @@
+# Runtime: none — the core tool is pure Python standard library (3.11+).
+# Development / test:
+pytest>=8.0
+
+# Optional, opt-in only (enables --llm enrichment; env-gated, never required):
+#   pip install anthropic>=0.40

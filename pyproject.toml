@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "control-evidence-review"
+version = "0.1.0"
+description = "Policy/control evidence review — maps control statements to supplied evidence and produces per-control verdicts. Decision support, not certification."
+authors = [{name = "Donald B. Havery", email = "dbhavery@gmail.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.11"
+# Core tool is pure standard library — no runtime dependencies.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+# Optional, opt-in LLM enrichment (env-gated, never required to run the tool).
+llm = ["anthropic>=0.40"]
+
+[project.scripts]
+cer = "cer.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["cer*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

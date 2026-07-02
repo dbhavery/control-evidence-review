@@ -1,0 +1,107 @@
+{
+  "catalog_name": "Generic Control Catalog (illustrative)",
+  "note": "Control identifiers (AC-2, AU-6, ...) are generic labels for readability only. This catalog is NOT a claim of conformance to NIST 800-53, SOC 2, HIPAA, GDPR, or any published framework. It exists to demonstrate evidence-to-control review.",
+  "controls": [
+    {
+      "id": "AC-2",
+      "title": "Account Management",
+      "description": "Accounts are provisioned under policy and access is reviewed periodically.",
+      "review_flags": ["exception"],
+      "requirements": [
+        {"name": "Documented account provisioning policy", "keywords": ["account provisioning", "onboarding", "account creation policy"]},
+        {"name": "Evidence of periodic access review", "keywords": ["access review", "recertification", "quarterly review"]}
+      ]
+    },
+    {
+      "id": "AU-6",
+      "title": "Audit Log Review",
+      "description": "Logs are centrally collected and reviewed on a defined cadence.",
+      "requirements": [
+        {"name": "Centralized log collection", "keywords": ["centralized logging", "log aggregation", "syslog"]},
+        {"name": "Evidence of log review cadence", "keywords": ["log review", "weekly review", "reviewed logs"]}
+      ]
+    },
+    {
+      "id": "CP-9",
+      "title": "Information Backup",
+      "description": "Backups are scheduled and periodically test-restored.",
+      "requirements": [
+        {"name": "Documented backup schedule", "keywords": ["backup policy", "backup schedule", "nightly backup"]},
+        {"name": "Evidence of restore testing", "keywords": ["restore test", "recovery test", "restore verification"]}
+      ]
+    },
+    {
+      "id": "IA-5",
+      "title": "Authenticator Management",
+      "description": "Multi-factor authentication is enforced and a password policy exists.",
+      "requirements": [
+        {"name": "MFA enforced", "keywords": ["multi-factor", "mfa", "two-factor"]},
+        {"name": "Password policy defined", "keywords": ["password policy", "minimum length", "complexity requirement"]}
+      ]
+    },
+    {
+      "id": "IR-4",
+      "title": "Incident Handling",
+      "description": "An incident response plan exists and incidents are documented.",
+      "review_flags": ["todo", "exception", "pending"],
+      "requirements": [
+        {"name": "Incident response plan", "keywords": ["incident response plan", "response playbook"]},
+        {"name": "Evidence of incident handling", "keywords": ["incident ticket", "postmortem", "incident report"]}
+      ]
+    },
+    {
+      "id": "RA-5",
+      "title": "Vulnerability Scanning",
+      "description": "Systems are scanned for vulnerabilities and findings are remediated.",
+      "requirements": [
+        {"name": "Scanning performed on a schedule", "keywords": ["vulnerability scan", "scan schedule", "scanned for vulnerabilities"]},
+        {"name": "Evidence of remediation", "keywords": ["remediation", "remediated", "patched vulnerability"]}
+      ]
+    },
+    {
+      "id": "SC-13",
+      "title": "Cryptographic Protection",
+      "description": "Data is encrypted at rest and in transit.",
+      "requirements": [
+        {"name": "Encryption at rest", "keywords": ["encryption at rest", "aes-256", "encrypted volume"]},
+        {"name": "Encryption in transit", "keywords": ["in transit", "tls", "https"]}
+      ]
+    },
+    {
+      "id": "SI-2",
+      "title": "Flaw Remediation (Patching)",
+      "description": "A patch management policy exists and patches are applied and logged.",
+      "requirements": [
+        {"name": "Patch management policy", "keywords": ["patch management", "patching policy", "patch cadence"]},
+        {"name": "Evidence of patches applied", "keywords": ["patch applied", "updates installed", "patch log"]}
+      ]
+    },
+    {
+      "id": "AT-2",
+      "title": "Security Awareness Training",
+      "description": "A training program exists and completion is tracked.",
+      "requirements": [
+        {"name": "Training program defined", "keywords": ["security awareness training", "training program"]},
+        {"name": "Completion records", "keywords": ["training completion", "completion record", "completed training"]}
+      ]
+    },
+    {
+      "id": "PS-4",
+      "title": "Personnel Termination",
+      "description": "Access is revoked promptly when personnel are terminated.",
+      "requirements": [
+        {"name": "Offboarding process", "keywords": ["offboarding", "termination checklist", "revoke access on termination"]},
+        {"name": "Termination records", "keywords": ["termination ticket", "deprovisioned", "access revoked"]}
+      ]
+    },
+    {
+      "id": "PE-3",
+      "title": "Physical Access Control",
+      "description": "Physical access to facilities is controlled and logged.",
+      "requirements": [
+        {"name": "Badge access control", "keywords": ["badge access", "physical access control", "access card"]},
+        {"name": "Visitor logging", "keywords": ["visitor log", "visitor sign-in", "visitor register"]}
+      ]
+    }
+  ]
+}
