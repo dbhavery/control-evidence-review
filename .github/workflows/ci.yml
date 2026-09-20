@@ -37,19 +37,21 @@ jobs:
             --catalog controls/catalog.json \
             --evidence evidence \
             --out reports \
-            --actor ci@example.com \
+            --actor reviewer@example.com \
             --clock 2026-07-01T12:00:00Z
 
       # Scans every pattern family cer/redaction.py masks, not a fixed list of
       # literals, so the check cannot fall behind the redactor. --expect-redacted
       # makes an unmasked or empty run fail instead of passing vacuously.
-      # --allow is the exact --actor id above, which the audit log records on
-      # purpose; any other address in that family still fails the build.
+      # --allow must be the exact --actor id used above: the audit log records it
+      # on purpose, and the step before appends to the committed sample log, so
+      # the two ids have to match. Any other address still fails the build
+      # (tests/test_leakcheck.py asserts both properties).
       - name: Verify no synthetic secrets leaked into the report
         run: |
           python -m cer.leakcheck reports \
             --expect-redacted \
-            --allow ci@example.com
+            --allow reviewer@example.com
 
       - name: Upload review artifacts
         if: always()

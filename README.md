@@ -22,7 +22,7 @@ mode exists but is never required.
     pip install -e ".[dev]"
     python -m cer.cli review --catalog controls/catalog.json --evidence evidence --out reports --actor reviewer@example.com
 
-Then open `reports/review.html` (per-control verdicts with redacted evidence), tail `reports/audit.jsonl` (append-only audit log), and read `tests/` (62 tests) — including the redaction and MISSING-evidence tests.
+Then open `reports/review.html` (per-control verdicts with redacted evidence), tail `reports/audit.jsonl` (append-only audit log), and read `tests/` (64 tests) — including the redaction and MISSING-evidence tests.
 
 ## What it does
 
@@ -178,7 +178,7 @@ exhaustive DLP coverage.
 
 ## Tests
 
-`python -m pytest -q` runs 62 tests across the rule engine, matcher, redaction,
+`python -m pytest -q` runs 64 tests across the rule engine, matcher, redaction,
 audit log, report generation, loaders, the CLI end-to-end path, and the CI leak
 gate.
 

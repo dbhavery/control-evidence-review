@@ -14,6 +14,7 @@ gap between what is masked and what is verified.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -164,6 +165,21 @@ def test_real_review_output_passes_the_check(tmp_path, capsys):
     )
 
 
+def _workflow_arg(flag: str) -> str:
+    """Read a single ``--flag value`` out of the CI workflow's run blocks.
+
+    Anchored to the start of a continuation line so the prose in the surrounding
+    YAML comments cannot be mistaken for the value.
+    """
+    match = re.search(
+        rf"^\s*{re.escape(flag)} (\S+?)\s*\\?$",
+        WORKFLOW.read_text(encoding="utf-8"),
+        re.MULTILINE,
+    )
+    assert match, f"{flag} not found in a run block of {WORKFLOW}"
+    return match.group(1)
+
+
 def test_ci_workflow_runs_the_leak_check():
     """Guard the fix: the workflow must invoke this check, not a literal grep."""
     workflow = WORKFLOW.read_text(encoding="utf-8")
@@ -171,3 +187,25 @@ def test_ci_workflow_runs_the_leak_check():
     assert "--expect-redacted" in workflow
     # The dead literal that could never fire must not come back.
     assert "sk_live_" not in workflow
+
+
+def test_workflow_allow_matches_the_actor_it_reviews_as():
+    """A mismatch here failed CI once: the sample log records --actor verbatim."""
+    assert _workflow_arg("--allow") == _workflow_arg("--actor")
+
+
+def test_committed_sample_reports_pass_the_check(capsys):
+    """The artifacts shipped in the repo must survive the gate CI runs.
+
+    CI appends to this committed audit log rather than starting a clean one, so
+    scanning a fresh temp directory is not enough to catch a drifted actor id.
+    """
+    rc = leakcheck_main(
+        [
+            str(REPO_ROOT / "reports"),
+            "--expect-redacted",
+            "--allow",
+            _workflow_arg("--allow"),
+        ]
+    )
+    assert rc == 0, capsys.readouterr().err
