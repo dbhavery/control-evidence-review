@@ -16,6 +16,11 @@ reports/*
 !reports/review.json
 !reports/audit.jsonl
 
+# Secrets. Real keys belong in a vault, never in the tree.
+.env
+.env.*
+!.env.example
+
 # OS
 .DS_Store
 Thumbs.db
