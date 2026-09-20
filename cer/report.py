@@ -86,7 +86,7 @@ def build_report(
             "actor": actor,
             "generated_at": generated_at,
             "framing": (
-                "Policy/control evidence review — decision support for a human "
+                "Policy/control evidence review: decision support for a human "
                 "reviewer. NOT a certification of SOC 2, HIPAA, GDPR, or any "
                 "framework."
             ),
@@ -204,7 +204,7 @@ def render_html(report: dict) -> str:
         f'{g["verdict"]}</span></td>'
         f'<td>{html.escape(g["rationale"])}</td></tr>'
         for g in report["gaps"]
-    ) or '<tr><td colspan="4" class="none">No gaps — every control satisfied.</td></tr>'
+    ) or '<tr><td colspan="4" class="none">No gaps. Every control satisfied.</td></tr>'
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -279,7 +279,7 @@ def render_html(report: dict) -> str:
     <h2>Controls</h2>
     {"".join(control_blocks)}
 
-    <h2>Gaps &mdash; reviewer worklist</h2>
+    <h2>Gaps: reviewer worklist</h2>
     <table>
       <tr><th>Control</th><th>Title</th><th>Verdict</th><th>Rationale</th></tr>
       {gap_rows}

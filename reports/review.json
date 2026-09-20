@@ -1,8 +1,8 @@
 {
   "meta": {
     "actor": "reviewer@example.com",
-    "generated_at": "2026-07-01T12:00:00Z",
-    "framing": "Policy/control evidence review — decision support for a human reviewer. NOT a certification of SOC 2, HIPAA, GDPR, or any framework.",
+    "generated_at": "2026-09-20T23:25:13Z",
+    "framing": "Policy/control evidence review: decision support for a human reviewer. NOT a certification of SOC 2, HIPAA, GDPR, or any framework.",
     "evidence_count": 14,
     "control_count": 11
   },
@@ -59,7 +59,7 @@
         {
           "evidence_id": "account-provisioning-policy",
           "source": "account-provisioning-policy.txt",
-          "excerpt": "ACCOUNT PROVISIONING POLICY (synthetic sample — not real data) All new hires follow the account provisioning and onboarding workflow. Account creation policy requires manager approval before an identity is issued. Policy owner: ..."
+          "excerpt": "ACCOUNT PROVISIONING POLICY (synthetic sample, not real data) All new hires follow the account provisioning and onboarding workflow. Account creation policy requires manager approval before an identity is issued. Policy owner: ..."
         }
       ]
     },
