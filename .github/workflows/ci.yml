@@ -40,13 +40,16 @@ jobs:
             --actor ci@example.com \
             --clock 2026-07-01T12:00:00Z
 
+      # Scans every pattern family cer/redaction.py masks, not a fixed list of
+      # literals, so the check cannot fall behind the redactor. --expect-redacted
+      # makes an unmasked or empty run fail instead of passing vacuously.
+      # --allow is the exact --actor id above, which the audit log records on
+      # purpose; any other address in that family still fails the build.
       - name: Verify no synthetic secrets leaked into the report
         run: |
-          if grep -REq "sk_live_|AKIAIOSFODNN7EXAMPLE|alice.admin@example.com" reports/; then
-            echo "Secret leaked into a generated report!"
-            exit 1
-          fi
-          echo "Redaction check passed."
+          python -m cer.leakcheck reports \
+            --expect-redacted \
+            --allow ci@example.com
 
       - name: Upload review artifacts
         if: always()

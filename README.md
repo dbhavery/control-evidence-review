@@ -22,7 +22,7 @@ mode exists but is never required.
     pip install -e ".[dev]"
     python -m cer.cli review --catalog controls/catalog.json --evidence evidence --out reports --actor reviewer@example.com
 
-Then open `reports/review.html` (per-control verdicts with redacted evidence), tail `reports/audit.jsonl` (append-only audit log), and read `tests/` (40 tests) — including the redaction and MISSING-evidence tests.
+Then open `reports/review.html` (per-control verdicts with redacted evidence), tail `reports/audit.jsonl` (append-only audit log), and read `tests/` (62 tests) — including the redaction and MISSING-evidence tests.
 
 ## What it does
 
@@ -38,9 +38,11 @@ Then open `reports/review.html` (per-control verdicts with redacted evidence), t
    - none met → `MISSING` (listed as a gap; never crashes)
    - review-flag term present (e.g. `TODO`, `exception`, `pending`) →
      `NEEDS_REVIEW`
-4. **Redacts** synthetic secrets/PII (emails, IPs, API keys, bearer tokens,
-   AWS-style keys, `secret=…` assignments) from every excerpt before it reaches
-   a report or the audit log.
+4. **Redacts** synthetic secrets/PII from every excerpt before it reaches a
+   report or the audit log. Six pattern families: `AWS_KEY`, `SECRET`
+   (`api_key=…` / `token:…` assignments), `BEARER`, `BLOB` (high-entropy
+   strings of 24 characters or more), `EMAIL`, `IP`. CI re-scans the generated
+   artifacts for all six (`cer/leakcheck.py`).
 5. **Writes** three artifacts:
    - `reports/review.json` — machine-readable report
    - `reports/review.html` — self-contained dark HTML report (inline CSS, no CDN)
@@ -72,6 +74,7 @@ evidence/*.txt ────────┘   evidence.load_evidence ─► [Evid
 | `cer/matcher.py` | Deterministic normalize + stem + phrase matching |
 | `cer/engine.py` | Rule engine → per-control verdict + rationale + confidence |
 | `cer/redaction.py` | Mask synthetic secrets/PII before output |
+| `cer/leakcheck.py` | CI gate: scan generated artifacts for any secret the redactor should have masked |
 | `cer/audit.py` | Append-only JSONL audit log, injectable clock |
 | `cer/report.py` | Build JSON report + self-contained HTML |
 | `cer/llm.py` | Optional, env-gated LLM reviewer note (never required) |
@@ -175,8 +178,18 @@ exhaustive DLP coverage.
 
 ## Tests
 
-`python -m pytest -q` runs 40 tests across the rule engine, matcher, redaction,
-audit log, report generation, loaders, and the CLI end-to-end path.
+`python -m pytest -q` runs 62 tests across the rule engine, matcher, redaction,
+audit log, report generation, loaders, the CLI end-to-end path, and the CI leak
+gate.
+
+**The leak gate is proven to fail.** CI runs
+`python -m cer.leakcheck reports --expect-redacted` after generating a sample
+review. It iterates the same pattern list `cer/redaction.py` masks with, so the
+gate cannot cover fewer families than the redactor. `tests/test_leakcheck.py`
+plants one fake secret per family, asserts the gate exits non-zero and names
+that family, then removes the secret and asserts it exits clean. Two further
+tests close the vacuous pass: an empty output directory is an error, and output
+with no `[REDACTED:...]` placeholder fails rather than looking clean.
 
 ## License
 

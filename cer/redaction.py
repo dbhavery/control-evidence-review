@@ -41,6 +41,26 @@ _PATTERNS: list[tuple[str, re.Pattern[str]]] = [
 ]
 
 
+# Shape of a mask that :func:`redact` leaves behind, e.g. ``[REDACTED:EMAIL]``.
+# A leak check must treat these as proof that redaction fired, not as a secret:
+# the SECRET rule would otherwise re-match its own placeholder.
+PLACEHOLDER_RE = re.compile(r"\[REDACTED:[A-Z_]+\]")
+
+
+def pattern_labels() -> tuple[str, ...]:
+    """Every pattern family this module redacts, in match order.
+
+    Public so a leak check can prove it covers all of them instead of
+    re-listing a subset that silently drifts out of date.
+    """
+    return tuple(label for label, _ in _PATTERNS)
+
+
+def iter_patterns() -> tuple[tuple[str, re.Pattern[str]], ...]:
+    """The (label, compiled regex) pairs used by :func:`redact`."""
+    return tuple(_PATTERNS)
+
+
 @dataclass
 class RedactionResult:
     text: str
