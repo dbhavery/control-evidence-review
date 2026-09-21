@@ -1,0 +1,594 @@
+{
+  "catalog_name": "Small Software Service Control Catalog (illustrative)",
+  "note": "Control identifiers (DP-1, API-2, ...) are local labels for readability only. This catalog is NOT a claim of conformance to NIST 800-53, SOC 2, HIPAA, GDPR, or any published framework. It describes the controls a one-owner software service handling customer data through a third-party model API would be expected to hold, and exists to demonstrate evidence-to-control review against a real operating business rather than a synthetic corpus. Written before the evidence was indexed, from control practice rather than from the evidence text, so that a control can fail. Several controls here are expected to come back MISSING for a business with no employees and no premises; that is the intended result, not a defect. Keyword rule: a keyword is included only if its presence in any document means this control's topic is under discussion. Bare common-English and cross-domain single tokens were removed after inspecting matches, because three of them produced false positives on the first run: \"secret\" matched \"instance ids are not secret\", \"visitor\" matched a website visitor in a rate-limit comment, and \"indemnity\" matched an NDA clause the business reviews rather than its own limit of liability.",
+  "controls": [
+    {
+      "id": "DP-1",
+      "title": "Customer Data Flow Is Written Down",
+      "description": "The business can state where customer data goes, which systems hold it, and which copies leave the customer's browser.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Destinations for customer data are stated",
+          "keywords": [
+            "where your messages go",
+            "data flow",
+            "leaves the tab",
+            "sent to",
+            "server logs"
+          ]
+        },
+        {
+          "name": "Storage locations are stated, including the absence of storage",
+          "keywords": [
+            "there is no database",
+            "not stored",
+            "no database of conversations"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DP-2",
+      "title": "Retention Schedule",
+      "description": "Each category of customer data has a stated retention period rather than being kept indefinitely by default.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A retention period is stated for correspondence",
+          "keywords": [
+            "retention",
+            "we keep",
+            "12 months",
+            "then delete",
+            "retain"
+          ]
+        },
+        {
+          "name": "A retention period is stated for customer-supplied files",
+          "keywords": [
+            "files you upload",
+            "uploaded files",
+            "photos and documents",
+            "length of your project",
+            "after it ends"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DP-3",
+      "title": "Deletion On Request",
+      "description": "A customer can ask for their data to be deleted, and the business states a time limit and any records it is obliged to keep.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A deletion request route and time limit exist",
+          "keywords": [
+            "deleting your data",
+            "ask us to delete",
+            "delete everything",
+            "within 30 days",
+            "erasure"
+          ]
+        },
+        {
+          "name": "Records exempt from deletion are identified",
+          "keywords": [
+            "required to keep",
+            "invoicing and tax",
+            "tax purposes",
+            "legal obligation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DP-4",
+      "title": "Third Parties That Receive Customer Data Are Named",
+      "description": "Every external service that customer data reaches is identified to the customer, not described in the abstract.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "The model provider is named",
+          "keywords": [
+            "Anthropic",
+            "model provider",
+            "subprocessor",
+            "data processor",
+            "third party provider"
+          ]
+        },
+        {
+          "name": "Onward sharing is addressed",
+          "keywords": [
+            "any other company",
+            "do not sell",
+            "onward",
+            "share your data",
+            "give them to"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DP-5",
+      "title": "Customer Data Excluded From Model Training",
+      "description": "The business states whether customer inputs are used to train a model, and on what basis.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A training-exclusion statement exists",
+          "keywords": [
+            "do not train",
+            "train ai",
+            "train its models",
+            "training data",
+            "used to train"
+          ]
+        },
+        {
+          "name": "The basis for the claim is attributed, not asserted bare",
+          "keywords": [
+            "published policy",
+            "policy states",
+            "their terms",
+            "according to",
+            "states that"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PAY-1",
+      "title": "Cardholder Data Kept Out Of Scope",
+      "description": "Card details are handled by a payment processor and never entered into or stored by the business's own systems.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Card handling is delegated to a processor",
+          "keywords": [
+            "hosted checkout",
+            "payment processor",
+            "we do not see",
+            "card details",
+            "Stripe"
+          ]
+        },
+        {
+          "name": "Customers are told not to send card or credential data through unsecured channels",
+          "keywords": [
+            "do not type",
+            "card numbers and passwords",
+            "never ask for them",
+            "do not send"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "API-1",
+      "title": "Public Endpoint Origin Restriction",
+      "description": "An endpoint reachable from the internet accepts cross-origin calls only from an allowlist, and caches are keyed so an allow or deny decision cannot be served to the wrong caller.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "An origin allowlist is enforced",
+          "keywords": [
+            "allowlist",
+            "allowed origins",
+            "origin allowlist",
+            "cors",
+            "cross origin"
+          ]
+        },
+        {
+          "name": "Cache correctness for origin-dependent responses is addressed",
+          "keywords": [
+            "vary origin",
+            "shared cache",
+            "preflight"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "API-2",
+      "title": "Abuse And Spend Limits On A Metered Endpoint",
+      "description": "An endpoint that costs money per request bounds how many requests it will serve, not only what one request may do, and the limit's weaknesses are written down.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A per-caller rate limit exists",
+          "keywords": [
+            "rate limit",
+            "per ip limit",
+            "rolling window",
+            "requests one ip",
+            "throttle"
+          ]
+        },
+        {
+          "name": "A service-wide ceiling or spend cap exists",
+          "keywords": [
+            "circuit breaker",
+            "daily limit",
+            "spend limit",
+            "spend cap",
+            "instance limit"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "API-3",
+      "title": "Untrusted Input Screening",
+      "description": "Input arriving from the public is screened before it reaches a model or a tool, and the output is checked before it reaches a customer.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Input screening exists",
+          "keywords": [
+            "injection",
+            "input screening",
+            "message length",
+            "prompt injection",
+            "sanitize"
+          ]
+        },
+        {
+          "name": "Output is validated before it is shown",
+          "keywords": [
+            "validator",
+            "output validation",
+            "currency guard",
+            "guard on the output"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SEC-1",
+      "title": "Secrets Management",
+      "description": "Credentials are held outside source control, and the handling of a live key is stated.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Secrets are kept out of the repository",
+          "keywords": [
+            "gitignored",
+            "env local",
+            "not committed"
+          ]
+        },
+        {
+          "name": "Key scope or rotation is addressed",
+          "keywords": [
+            "key rotation",
+            "rotate the key",
+            "scoped credential",
+            "least privilege",
+            "separate key"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CM-1",
+      "title": "Change Management With Rollback",
+      "description": "A change to production is made against a written procedure in which every step states how to verify it and how to undo it.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A written cutover or deployment procedure exists",
+          "keywords": [
+            "runbook",
+            "cutover",
+            "deployment procedure",
+            "gate check"
+          ]
+        },
+        {
+          "name": "Every step has a stated rollback",
+          "keywords": [
+            "rollback",
+            "roll back",
+            "revert the commit"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEF-1",
+      "title": "Defect Tracking And Disposition",
+      "description": "Defects found are recorded with what is wrong and what was decided, rather than fixed silently or forgotten.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A defect log exists",
+          "keywords": [
+            "issues log",
+            "defect",
+            "bugs discovered",
+            "severity"
+          ]
+        },
+        {
+          "name": "Entries carry a disposition",
+          "keywords": [
+            "resolved",
+            "closed",
+            "not fixed",
+            "found while",
+            "needs don"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SUP-1",
+      "title": "Support Commitment And Human Escalation",
+      "description": "A customer is told how quickly they will get a reply and how to reach a person, and an automated agent has a route to hand off.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A response-time commitment is published",
+          "keywords": [
+            "response time",
+            "business days",
+            "we reply",
+            "respond within",
+            "turnaround"
+          ]
+        },
+        {
+          "name": "A human escalation path exists",
+          "keywords": [
+            "escalation",
+            "escalate to human",
+            "bring in a human",
+            "handoff",
+            "speak to a person"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AT-1",
+      "title": "Security Awareness Training",
+      "description": "People who handle customer data receive periodic security awareness training, with a record of completion.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A training requirement is defined",
+          "keywords": [
+            "security awareness",
+            "security training",
+            "annual training",
+            "phishing training",
+            "training requirement"
+          ]
+        },
+        {
+          "name": "Completion is recorded",
+          "keywords": [
+            "training record",
+            "completion record",
+            "attestation",
+            "completed training",
+            "roster"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PE-1",
+      "title": "Physical Access Control",
+      "description": "Premises or facilities holding customer data or equipment restrict physical entry and log visitors.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Physical entry restriction is defined",
+          "keywords": [
+            "physical access",
+            "badge",
+            "server room"
+          ]
+        },
+        {
+          "name": "Visitor handling is defined",
+          "keywords": [
+            "visitor log",
+            "escorted",
+            "sign in sheet",
+            "access log"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BC-1",
+      "title": "Backup And Recovery",
+      "description": "Data the business could not rebuild is backed up on a schedule, and a restore has actually been tested.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "A backup schedule exists",
+          "keywords": [
+            "backup schedule",
+            "backed up",
+            "nightly backup",
+            "backup policy"
+          ]
+        },
+        {
+          "name": "A restore has been tested",
+          "keywords": [
+            "restore test",
+            "test restore",
+            "recovery test",
+            "verified restore",
+            "recovery point"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "VM-1",
+      "title": "Dependency Vulnerability Management",
+      "description": "Third-party packages are checked for known vulnerabilities and updated on a stated cadence.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Dependencies are scanned for known vulnerabilities",
+          "keywords": [
+            "vulnerability scan",
+            "dependabot",
+            "npm audit",
+            "advisory",
+            "cve"
+          ]
+        },
+        {
+          "name": "A patching cadence is defined",
+          "keywords": [
+            "patch cadence",
+            "patching",
+            "update schedule",
+            "remediation window",
+            "upgrade policy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "INS-1",
+      "title": "Insurance And Liability Position",
+      "description": "The business has decided its insurance position and states the limits of its liability to customers.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "An insurance position is stated",
+          "keywords": [
+            "liability insurance",
+            "insured",
+            "professional indemnity"
+          ]
+        },
+        {
+          "name": "Contractual limits of liability are stated",
+          "keywords": [
+            "limitation of liability",
+            "limit of liability",
+            "not liable",
+            "our liability"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PS-1",
+      "title": "Access Removal When People Leave",
+      "description": "When someone with access to customer data stops working with the business, their access is removed on a stated timeline.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "An offboarding step for access removal is defined",
+          "keywords": [
+            "offboarding",
+            "termination",
+            "revoke access",
+            "remove access",
+            "last day"
+          ]
+        },
+        {
+          "name": "Who holds access is recorded",
+          "keywords": [
+            "who has access",
+            "access list",
+            "only person",
+            "no other account",
+            "account inventory"
+          ]
+        }
+      ]
+    }
+  ]
+}
