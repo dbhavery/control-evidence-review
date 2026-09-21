@@ -3,6 +3,55 @@
 Defects found while working on something else. Logged, not fixed, unless the fix was in
 scope for the task that found them.
 
+## 2026-09-21 — A catalog goes stale against a growing corpus, and the tell is a verdict improving
+
+**Severity:** medium as a method error. Nothing in `cer/` is wrong. The catalog is.
+
+**Fixed for the one instance, open as a class.**
+
+**Found while:** re-running the review after the evidence owner added three documents, and
+checking why a verdict had moved in the business's favour.
+
+PE-1 (physical entry restriction) went from MISSING to PARTIAL. Nothing about the business
+changed. It has no premises. What changed is that the owner published a web-accessibility
+policy containing the sentence "no badge you can buy carries legal weight", and PE-1 carried
+`badge` as a keyword. A badge there is a trust seal displayed on a website. PE-1 means a card
+that opens a door.
+
+`badge` is removed and PE-1 is back to MISSING. Totals returned to satisfied=7 partial=2
+needs_review=5 missing=5, unchanged from the previous corpus, which is the result that says
+the three new documents genuinely touch none of these 19 controls.
+
+**Why this is a class and not an incident.** This is the fifth keyword removed from this
+catalog for the same reason, and the first one caused by the corpus growing rather than by
+reading the first run's matches. The catalog is written once and then re-run against a corpus
+that keeps changing under it. Every new document is a fresh chance for a cross-domain token to
+land somewhere harmless-looking.
+
+**The direction of the error is the part worth keeping.** A false positive on an evidence
+review moves a verdict *upward*: a gap stops being reported. Nobody chases a control that
+just started passing, and the run that introduces it looks like progress. A false negative at
+least leaves a MISSING with no evidence behind it, which invites a look.
+
+**What was considered and rejected.** A lint failing any single-token keyword. Measured
+first: 35 of the 168 keywords are single tokens and most are properly unusable outside their
+control's topic (`cors`, `preflight`, `dependabot`, `cve`, `subprocessor`, `gitignored`,
+`offboarding`). Four of the five historical removals were single tokens, so the lint would
+have caught them, but it would also flag 35 rows that are correct, and a gate that cries wolf
+31 times gets switched off. Not built.
+
+**Suggested instead, not applied.** Make the tool report verdict *movement* between two runs,
+so a control that improves is surfaced for the same scrutiny a new gap gets. The review
+currently reports a state and has no memory of the last one, so "PE-1 improved and nothing
+was done to earn it" is invisible unless a human happens to remember the previous totals. The
+audit log already records every verdict with a timestamp, so the previous state is on disk;
+nothing reads it back.
+
+**Also noted, not a defect.** The business now documents three things this catalog does not
+ask about: who the work is done by, site and email migration, and accessibility testing
+method. An unchanged total across a corpus that grew is only reassuring about the controls
+that exist.
+
 ## 2026-09-20 — The BLOB redaction pattern destroys file paths, and provenance with them
 
 **Severity:** medium. It does not leak anything. It deletes the one field an evidence
