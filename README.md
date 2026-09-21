@@ -1,10 +1,10 @@
 # Control / Policy Evidence Review
 
 A local Python CLI that maps **control statements** to **supplied evidence** and
-produces a **per-control verdict** — `SATISFIED`, `PARTIAL`, `MISSING`, or
-`NEEDS_REVIEW` — with the matched evidence, a rationale, and a confidence signal.
+produces a **per-control verdict**: `SATISFIED`, `PARTIAL`, `MISSING`, or
+`NEEDS_REVIEW`, with the matched evidence, a rationale, and a confidence signal.
 
-> **Framing (read this).** This is a **policy/control evidence review** aid —
+> **Framing (read this).** This is a **policy/control evidence review** aid:
 > **decision support for a human reviewer**. It is **not** a certification
 > authority and makes **no** claim of SOC 2, HIPAA, GDPR, or any other
 > compliance. The control identifiers (`AC-2`, `AU-6`, …) are **generic labels**
@@ -22,7 +22,7 @@ mode exists but is never required.
     pip install -e ".[dev]"
     python -m cer.cli review --catalog controls/catalog.json --evidence evidence --out reports --actor reviewer@example.com
 
-Then open `reports/review.html` (per-control verdicts with redacted evidence), tail `reports/audit.jsonl` (append-only audit log), and read `tests/` (64 tests) — including the redaction and MISSING-evidence tests.
+Then open `reports/review.html` (per-control verdicts with redacted evidence), tail `reports/audit.jsonl` (append-only audit log), and read `tests/` (64 tests), including the redaction and MISSING-evidence tests.
 
 ## What it does
 
@@ -44,9 +44,9 @@ Then open `reports/review.html` (per-control verdicts with redacted evidence), t
    strings of 24 characters or more), `EMAIL`, `IP`. CI re-scans the generated
    artifacts for all six (`cer/leakcheck.py`).
 5. **Writes** three artifacts:
-   - `reports/review.json` — machine-readable report
-   - `reports/review.html` — self-contained dark HTML report (inline CSS, no CDN)
-   - `reports/audit.jsonl` — append-only JSONL audit trail, one line per verdict
+   - `reports/review.json`: machine-readable report
+   - `reports/review.html`: self-contained dark HTML report (inline CSS, no CDN)
+   - `reports/audit.jsonl`: append-only JSONL audit trail, one line per verdict
 
 ## Architecture (60-second read)
 
@@ -81,7 +81,7 @@ evidence/*.txt ────────┘   evidence.load_evidence ─► [Evid
 | `cer/cli.py` | `cer review` entry point |
 
 **Why deterministic first:** review needs reproducibility. The same evidence
-produces the same verdict, byte-for-byte, and — with `--clock` — a byte-stable
+produces the same verdict, byte-for-byte, and, with `--clock`, a byte-stable
 audit log. The optional LLM layer can only *annotate*; it can never change a
 verdict.
 
@@ -90,7 +90,7 @@ verdict.
 ## Install
 
 ```bash
-git clone <local-repo>            # local only — no remote is configured
+git clone https://github.com/dbhavery/control-evidence-review.git
 cd control-evidence-review
 python -m venv .venv && . .venv/Scripts/activate   # Windows Git Bash
 #                        source .venv/bin/activate  # macOS/Linux
@@ -157,16 +157,16 @@ python -m cer.cli review --catalog controls/catalog.json --evidence evidence
 
 If `CER_LLM` is set without a key or the `anthropic` package, the tool fails with
 a clear message rather than faking output. The verdict itself is always the
-deterministic engine's — the LLM only appends a note.
+deterministic engine's. The LLM only appends a note.
 
 ---
 
 ## Fixtures
 
-- `controls/catalog.json` — 11 generic controls, each with named requirements
+- `controls/catalog.json`: 11 generic controls, each with named requirements
   and keyword sets. Some controls carry `review_flags` (e.g. `todo`) that force
   `NEEDS_REVIEW`.
-- `evidence/` — 14 synthetic snippets. Some fully satisfy a control, some
+- `evidence/`: 14 synthetic snippets. Some fully satisfy a control, some
   satisfy only one requirement (→ `PARTIAL`), and two controls (`PS-4`, `PE-3`)
   have **no** matching evidence (→ `MISSING`). Several snippets contain
   **baked-in synthetic secrets** (fake emails, IPs, `api_key=…`, bearer tokens,
@@ -193,4 +193,4 @@ with no `[REDACTED:...]` placeholder fails rather than looking clean.
 
 ## License
 
-MIT — see `LICENSE`.
+MIT. See `LICENSE`.
