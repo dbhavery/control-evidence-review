@@ -637,6 +637,53 @@
           ]
         }
       ]
+    },
+    {
+      "id": "DIS-1",
+      "title": "Automated Interaction And Work Composition Are Disclosed",
+      "description": "A customer interacting with an automated system is told so, and can find out who performs the work. Anchored to statute rather than to the evidence: EU AI Act Article 50(1) requires providers to ensure a person is informed they are interacting with an AI system unless that is obvious to a reasonably well-informed, observant and circumspect person, with Article 50(5) requiring the information in a clear and distinguishable manner at the latest at first interaction; California Business and Professions Code 17941(b) requires bot disclosure that is clear, conspicuous and reasonably designed to inform, and 17941(a) provides no liability where disclosure is made. FTC Act section 5 (15 U.S.C. 45(a)(1)) supports the composition requirement but supplies no checklist: its operative text declares unfair or deceptive acts unlawful and names no disclosure duty, so it gives a standard to be judged against and not requirements to be tested. Read from the statutory texts, not from any summary.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Automated interaction is disclosed as automated",
+          "keywords": [
+            "interacting with an ai",
+            "this is an ai",
+            "is an ai",
+            "not a human",
+            "automated assistant",
+            "you are talking to a bot"
+          ]
+        },
+        {
+          "name": "Whether work is performed by employees or by software is stated",
+          "keywords": [
+            "not employees",
+            "no employees",
+            "not contractors",
+            "on the payroll"
+          ]
+        },
+        {
+          "name": "Subcontracting or onward delegation of the work is addressed",
+          "keywords": [
+            "subcontract",
+            "subcontracted",
+            "outsourced",
+            "white-label",
+            "offshore"
+          ]
+        },
+        {
+          "name": "Disclosure is made at first interaction rather than on request",
+          "keywords": [],
+          "needs": "Evidence of WHEN and HOW a disclosure is shown to a user, which a document corpus cannot carry. AI Act Article 50(5) requires the information at the latest at the time of first interaction, and 17941(b) requires it be clear and conspicuous; both are properties of the running interface, not of a policy file. A sentence in an SOP is evidence the claim exists, never evidence a user saw it before typing. Satisfying this needs a different evidence type, a screenshot or an interface test, not a better keyword."
+        }
+      ]
     }
   ]
 }
