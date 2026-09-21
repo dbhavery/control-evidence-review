@@ -142,3 +142,72 @@ def test_full_catalog_expected_distribution(controls, corpus):
     assert counts[Verdict.PARTIAL] == 3
     assert counts[Verdict.NEEDS_REVIEW] == 1
     assert counts[Verdict.MISSING] == 2
+
+
+def _ceiling_corpus():
+    return [Evidence(id="doc", source="doc.md", text="We follow WCAG 2.2 Level AA.")]
+
+
+def test_a_requirement_with_no_matcher_is_not_evaluated_and_caps_the_control():
+    """An unevaluated requirement stays in the denominator and lowers the max.
+
+    Dropping it from the denominator instead would report SATISFIED on a control
+    whose requirement nobody checked, which hides a real gap in the favourable
+    direction.
+    """
+    control = Control(
+        id="C-1",
+        title="One requirement has no matcher",
+        description="",
+        requirements=(
+            Requirement("level is named", ("level aa",)),
+            Requirement("date is present", ()),
+        ),
+    )
+    v = evaluate_control(control, EvidenceIndex(_ceiling_corpus()))
+
+    assert v.verdict is Verdict.PARTIAL
+    assert v.instrument_max == 1
+    assert v.unevaluated_requirements == ["date is present"]
+    assert "cannot exceed 1/2" in v.rationale
+    # The unevaluated requirement must not be reported as evidence failing.
+    assert "Unmet:" not in v.rationale
+
+
+def test_attaching_a_matcher_clears_the_cap_with_nothing_to_remember():
+    """The control for the test above, and the whole point of deriving the cap.
+
+    A stored "cannot be checked" flag would keep asserting the limitation after
+    a matcher was attached, and nothing would contradict it. Deriving it from
+    the matcher's presence means attaching one clears it by construction.
+    """
+    corpus = _ceiling_corpus()
+    capped = Control(
+        id="C-1",
+        title="capped",
+        description="",
+        requirements=(
+            Requirement("level is named", ("level aa",)),
+            Requirement("date is present", ()),
+        ),
+    )
+    before = evaluate_control(capped, EvidenceIndex(corpus))
+    assert before.instrument_max == 1, "control invalid: cap never applied"
+    assert "cannot exceed" in before.rationale
+
+    # Identical control, one matcher attached, nothing else touched.
+    fixed = Control(
+        id="C-1",
+        title="capped",
+        description="",
+        requirements=(
+            Requirement("level is named", ("level aa",)),
+            Requirement("date is present", ("wcag",)),
+        ),
+    )
+    after = evaluate_control(fixed, EvidenceIndex(corpus))
+
+    assert after.instrument_max == 2
+    assert after.unevaluated_requirements == []
+    assert "cannot exceed" not in after.rationale
+    assert after.verdict is Verdict.SATISFIED

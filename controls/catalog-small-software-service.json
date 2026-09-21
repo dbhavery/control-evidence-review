@@ -587,6 +587,56 @@
           ]
         }
       ]
+    },
+    {
+      "id": "ACC-1",
+      "title": "Published Accessibility Conformance Claim Is Complete",
+      "description": "Any published accessibility conformance claim carries the five components WCAG 2.2 section 5.3.1 requires, so a reader can tell what was claimed, for which pages, and on what the claim rests. Derived from the standard text, not from the evidence: the five requirements below are the five components 5.3.1 enumerates, in its order.",
+      "review_flags": [
+        "tbd_don",
+        "tbd",
+        "todo"
+      ],
+      "requirements": [
+        {
+          "name": "Date of the claim is stated",
+          "keywords": [],
+          "needs": "A date pattern. Keyword matching cannot express \"a date is present\": the documents write a bolded label followed by the value (\"Date. 21 September 2026\"), and a bare \"date\" keyword would match most of the corpus. Anchor a future pattern on the label, not on a date format. Until then this requirement is not evaluated and the control cannot reach SATISFIED. Empty keywords is the whole mechanism: the limitation is derived from the missing matcher, so attaching one clears it and no stored flag survives to contradict the verdict."
+        },
+        {
+          "name": "Guidelines title, version and URI are given",
+          "keywords": [
+            "w3.org/tr/wcag",
+            "w3.org/tr/wcag22"
+          ]
+        },
+        {
+          "name": "Conformance level satisfied is named",
+          "keywords": [
+            "level aa",
+            "level aaa",
+            "conformance level",
+            "level a satisfied"
+          ]
+        },
+        {
+          "name": "Pages covered are described, including whether subdomains are included",
+          "keywords": [
+            "subdomains",
+            "pages covered",
+            "pages included in the claim",
+            "list of uris"
+          ]
+        },
+        {
+          "name": "Web content technologies relied upon are listed",
+          "keywords": [
+            "technologies relied upon",
+            "relied upon",
+            "wai-aria"
+          ]
+        }
+      ]
     }
   ]
 }

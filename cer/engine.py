@@ -35,6 +35,12 @@ def evaluate_control(
     all_matched_evidence: set[str] = set()
 
     for req in control.requirements:
+        # A requirement with nothing matchable attached is not evaluated. It is
+        # NOT quietly dropped from the denominator either: a required component
+        # nobody checked is still unverified, and reducing the denominator would
+        # report SATISFIED on a control with an unchecked requirement, which is
+        # the upward direction that hides a real gap.
+        checkable = bool(req.keywords)
         matched_keywords: list[str] = []
         matched_ev: set[str] = set()
         for kw in req.keywords:
@@ -42,13 +48,14 @@ def evaluate_control(
             if hits:
                 matched_keywords.append(kw)
                 matched_ev.update(hits)
-        met = len(matched_keywords) >= req.min_hits
+        met = checkable and len(matched_keywords) >= req.min_hits
         req_results.append(
             RequirementResult(
                 name=req.name,
                 met=met,
                 matched_keywords=matched_keywords,
                 matched_evidence_ids=sorted(matched_ev),
+                checkable=checkable,
             )
         )
         if met:
@@ -141,12 +148,23 @@ def _decide(
         )
         return (Verdict.NEEDS_REVIEW, 0.5, rationale)
 
-    unmet = [r.name for r in req_results if not r.met]
-    rationale = (
-        f"{met_count}/{total} requirements met. Unmet: {unmet}. "
-        "Treated as a partial gap."
-    )
-    return (Verdict.PARTIAL, round(0.4 + 0.3 * coverage, 3), rationale)
+    # "Nothing matched" and "never checked" are different findings and must not
+    # share a line. One is a statement about the evidence, the other about the
+    # instrument, and a reader who cannot tell them apart reads a tool limit as
+    # a gap in the evidence.
+    unmet = [r.name for r in req_results if not r.met and r.checkable]
+    unevaluated = [r.name for r in req_results if not r.checkable]
+    parts = [f"{met_count}/{total} requirements met."]
+    if unmet:
+        parts.append(f"Unmet: {unmet}.")
+    if unevaluated:
+        parts.append(
+            f"Not evaluated, no matcher attached: {unevaluated}. "
+            f"This control cannot exceed {total - len(unevaluated)}/{total} "
+            "until one is."
+        )
+    parts.append("Treated as a partial gap.")
+    return (Verdict.PARTIAL, round(0.4 + 0.3 * coverage, 3), " ".join(parts))
 
 
 def _breadth(req_results: list[RequirementResult]) -> float:

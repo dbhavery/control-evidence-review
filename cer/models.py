@@ -71,6 +71,14 @@ class RequirementResult:
     met: bool
     matched_keywords: list[str] = field(default_factory=list)
     matched_evidence_ids: list[str] = field(default_factory=list)
+    # False when the requirement has no matcher attached, so the engine never
+    # evaluated it. DERIVED at evaluation time from whether the requirement
+    # carries anything matchable, never stored in the catalog. A stored
+    # "cannot be checked" boolean is a hand label one level down: it keeps
+    # asserting the limitation after a matcher is attached, and nothing
+    # contradicts it, so there is no symptom. Attaching a matcher clears this
+    # by construction.
+    checkable: bool = True
 
 
 @dataclass
@@ -88,8 +96,25 @@ class ControlVerdict:
 
     @property
     def is_gap(self) -> bool:
-        """A gap is anything not fully satisfied — the reviewer's worklist."""
+        """A gap is anything not fully satisfied, the reviewer's worklist."""
         return self.verdict is not Verdict.SATISFIED
+
+    @property
+    def unevaluated_requirements(self) -> list[str]:
+        """Requirements the engine never evaluated, for want of a matcher."""
+        return [r.name for r in self.requirement_results if not r.checkable]
+
+    @property
+    def instrument_max(self) -> int:
+        """The highest met-count this control can ever reach as configured.
+
+        Derived, so it cannot go stale. When a matcher is attached to the last
+        unevaluated requirement this equals the requirement count and every
+        caveat keyed on it stops rendering, with no number written anywhere to
+        update. Reporting a ceiling as a literal would contradict the verdict
+        beside it the moment the tool improved.
+        """
+        return sum(1 for r in self.requirement_results if r.checkable)
 
     def to_dict(self) -> dict:
         return {
