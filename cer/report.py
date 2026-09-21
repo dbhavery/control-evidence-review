@@ -46,13 +46,62 @@ def _excerpt(text: str) -> str:
     return collapsed
 
 
+def _excerpt_note(report: dict) -> str:
+    """Footer wording, so a reader can tell which kind of report this is."""
+    if report["meta"].get("excerpts_included", True):
+        return "evidence excerpts redacted"
+    return "evidence quotations withheld by the evidence owner"
+
+
+_WITHHELD_FLAG = "(withheld)"
+
+
+def _withhold_flag_terms(control: dict) -> dict:
+    """Strip review-flag TERMS from a control, keeping the fact that one fired.
+
+    A review flag is a literal string found in the evidence, so it is evidence
+    content by exactly the same argument as a quotation. Publishing the terms
+    leaks them: a run over one real corpus put the owner's internal marker into
+    a report eleven times through this field alone, after the quotations had
+    already been withheld.
+
+    What survives is the finding, which is what a report is for: this control
+    needs a human because the supporting document carries an unresolved marker.
+    What goes is the marker's wording and how many distinct ones matched.
+    """
+    hits = control.get("review_flags_hit") or []
+    if not hits:
+        return control
+    out = dict(control)
+    out["review_flags_hit"] = [_WITHHELD_FLAG]
+    # The engine interpolates the list into its rationale, so the terms appear
+    # there too. Replace the exact rendering rather than reword the sentence,
+    # so the rationale stays the engine's and cannot drift from it.
+    out["rationale"] = control["rationale"].replace(str(hits), _WITHHELD_FLAG)
+    return out
+
+
 def build_report(
     verdicts: list[ControlVerdict],
     corpus: list[Evidence],
     actor: str,
     generated_at: str,
+    include_excerpts: bool = True,
 ) -> dict:
-    """Assemble the machine-readable report structure."""
+    """Assemble the machine-readable report structure.
+
+    ``include_excerpts=False`` keeps every verdict, rationale, matched keyword
+    and evidence id, and drops only the quoted text. The result says what was
+    found and which document supports it without reproducing the document.
+
+    That distinction is the whole point of the flag. Redaction removes secrets
+    from a quote; it cannot make a quote safe to publish when the sensitivity
+    is the subject matter rather than a token in it. A comment explaining that
+    a spend limit is held in module memory and is therefore "a brake, not a
+    lock" carries no secret and still should not be published, because it tells
+    a reader where a paid endpoint is weakest. Only the author of the evidence
+    can make that call, so the tool has to be able to report without quoting.
+    """
     by_id = {ev.id: ev for ev in corpus}
     counts = Counter(v.verdict for v in verdicts)
 
@@ -62,20 +111,29 @@ def build_report(
             {
                 "evidence_id": eid,
                 "source": by_id[eid].source if eid in by_id else eid,
-                "excerpt": _excerpt(by_id[eid].text) if eid in by_id else "",
+                "excerpt": (
+                    _excerpt(by_id[eid].text)
+                    if include_excerpts and eid in by_id
+                    else ""
+                ),
             }
             for eid in v.matched_evidence_ids
         ]
         d = v.to_dict()
         d["evidence"] = excerpts
+        if not include_excerpts:
+            d = _withhold_flag_terms(d)
         controls_out.append(d)
 
+    # The gap worklist repeats each rationale, so it needs the same treatment
+    # as the control blocks or the terms leak through the table instead.
+    rationale_by_id = {c["control_id"]: c["rationale"] for c in controls_out}
     gaps = [
         {
             "control_id": v.control_id,
             "title": v.title,
             "verdict": v.verdict.value,
-            "rationale": v.rationale,
+            "rationale": rationale_by_id.get(v.control_id, v.rationale),
         }
         for v in verdicts
         if v.is_gap
@@ -92,6 +150,7 @@ def build_report(
             ),
             "evidence_count": len(corpus),
             "control_count": len(verdicts),
+            "excerpts_included": include_excerpts,
         },
         "summary": {
             "satisfied": counts.get(Verdict.SATISFIED, 0),
@@ -165,9 +224,19 @@ def render_html(report: dict) -> str:
             for r in c["requirements"]
         )
         if c["evidence"]:
+            # An empty excerpt must never look like absent evidence. When
+            # quoting is switched off the document is still named and still
+            # supports the verdict; only the words are withheld.
             ev = "".join(
                 f'<div class="ev"><span class="evid">{html.escape(e["evidence_id"])}</span>'
-                f'<span class="evtext">{html.escape(e["excerpt"])}</span></div>'
+                + (
+                    f'<span class="evtext">{html.escape(e["excerpt"])}</span>'
+                    if e["excerpt"]
+                    else '<span class="evtext none">Quotation withheld by the '
+                    "evidence owner. This document was matched and supports the "
+                    "verdict above.</span>"
+                )
+                + "</div>"
                 for e in c["evidence"]
             )
         else:
@@ -285,7 +354,7 @@ def render_html(report: dict) -> str:
       {gap_rows}
     </table>
 
-    <footer>Generated by control-evidence-review &middot; evidence excerpts redacted &middot; decision support only</footer>
+    <footer>Generated by control-evidence-review &middot; {_excerpt_note(report)} &middot; decision support only</footer>
   </div>
 </body>
 </html>

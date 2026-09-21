@@ -59,7 +59,11 @@ def run_review(args: argparse.Namespace) -> int:
     audit.record_all(verdicts, actor=args.actor)
 
     report = build_report(
-        verdicts, corpus, actor=args.actor, generated_at=generated_at
+        verdicts,
+        corpus,
+        actor=args.actor,
+        generated_at=generated_at,
+        include_excerpts=not args.no_excerpts,
     )
     json_path = write_json(report, out_dir / "review.json")
     html_path = write_html(report, out_dir / "review.html")
@@ -117,6 +121,15 @@ def build_parser() -> argparse.ArgumentParser:
         default="",
         help="Fixed ISO-8601 timestamp for deterministic runs (e.g. "
         "2026-07-01T12:00:00Z). Omit to use live UTC time.",
+    )
+    rev.add_argument(
+        "--no-excerpts",
+        action="store_true",
+        help="Report verdicts, rationales, matched keywords and evidence ids "
+        "without quoting the evidence text. For a review whose findings can be "
+        "published but whose corpus cannot. Redaction strips secrets from a "
+        "quote; it cannot make a quote publishable when the subject matter "
+        "itself is sensitive.",
     )
     rev.set_defaults(func=run_review)
     return parser

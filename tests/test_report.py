@@ -96,3 +96,115 @@ def test_write_html_creates_file(tmp_path, controls, corpus):
     path = write_html(report, tmp_path / "review.html")
     assert path.exists()
     assert path.read_text(encoding="utf-8").startswith("<!DOCTYPE html>")
+
+
+def test_no_excerpts_withholds_text_but_keeps_every_finding():
+    """The publishable-findings mode must lose quotes and nothing else.
+
+    A summary report is only worth publishing if it says exactly what the full
+    one said. This asserts the verdicts, rationales, matched keywords and
+    evidence ids are identical between the two, and that the only difference is
+    the quoted text.
+    """
+    from cer.catalog import load_catalog
+    from cer.engine import evaluate_all
+    from cer.models import Evidence
+    from cer.report import build_report
+
+    corpus = [
+        Evidence("p1", "p1.md", "We keep that email for 12 months and then delete it."),
+        Evidence("p2", "p2.md", "Backups run nightly and a restore test is recorded."),
+    ]
+    controls = load_catalog("controls/catalog.json")
+    verdicts = evaluate_all(controls, corpus)
+
+    full = build_report(verdicts, corpus, actor="t", generated_at="2026-01-01T00:00:00Z")
+    quiet = build_report(
+        verdicts,
+        corpus,
+        actor="t",
+        generated_at="2026-01-01T00:00:00Z",
+        include_excerpts=False,
+    )
+
+    assert full["summary"] == quiet["summary"]
+    assert full["gaps"] == quiet["gaps"]
+    assert full["meta"]["excerpts_included"] is True
+    assert quiet["meta"]["excerpts_included"] is False
+
+    for a, b in zip(full["controls"], quiet["controls"], strict=True):
+        assert a["verdict"] == b["verdict"]
+        assert a["rationale"] == b["rationale"]
+        assert a["requirements"] == b["requirements"]
+        assert [e["evidence_id"] for e in a["evidence"]] == [
+            e["evidence_id"] for e in b["evidence"]
+        ]
+        assert all(e["excerpt"] == "" for e in b["evidence"])
+
+    # Control: the full report must actually carry text, or the assertion
+    # above passes for the wrong reason on an empty corpus.
+    assert any(e["excerpt"] for c in full["controls"] for e in c["evidence"])
+
+
+def test_withheld_quote_is_labelled_not_blank_in_html():
+    """An empty excerpt must not read as absent evidence."""
+    from cer.engine import evaluate_all
+    from cer.catalog import load_catalog
+    from cer.models import Evidence
+    from cer.report import build_report, render_html
+
+    from cer.evidence import load_evidence
+
+    # The repo's own sample corpus, because a corpus that matches nothing
+    # renders "No matching evidence supplied" and the assertion below would
+    # pass or fail for reasons that have nothing to do with withholding.
+    corpus = load_evidence("evidence")
+    verdicts = evaluate_all(load_catalog("controls/catalog.json"), corpus)
+    quiet = build_report(
+        verdicts, corpus, actor="t", generated_at="2026-01-01T00:00:00Z",
+        include_excerpts=False,
+    )
+    html_out = render_html(quiet)
+    assert "Quotation withheld by the evidence owner" in html_out
+    assert "evidence quotations withheld by the evidence owner" in html_out
+
+
+def test_no_excerpts_also_withholds_review_flag_terms():
+    """A review flag is a string found in the evidence, so it is evidence.
+
+    Regression: the first publishable run withheld every quotation and still
+    printed the evidence owner's internal marker eleven times, because the flag
+    terms travel in review_flags_hit AND are interpolated into the engine's
+    rationale AND repeated in the gap worklist. All three paths are covered.
+    """
+    from cer.catalog import load_catalog
+    from cer.engine import evaluate_all
+    from cer.evidence import load_evidence
+    from cer.report import build_report, render_html
+
+    corpus = load_evidence("evidence")
+    verdicts = evaluate_all(load_catalog("controls/catalog.json"), corpus)
+
+    full = build_report(verdicts, corpus, actor="t", generated_at="2026-01-01T00:00:00Z")
+    quiet = build_report(
+        verdicts, corpus, actor="t", generated_at="2026-01-01T00:00:00Z",
+        include_excerpts=False,
+    )
+
+    # Control: the sample corpus must actually trip a review flag, or this
+    # test passes for the wrong reason.
+    fired = [c for c in full["controls"] if c["review_flags_hit"]]
+    assert fired, "sample corpus trips no review flag; test proves nothing"
+    terms = {t for c in fired for t in c["review_flags_hit"]}
+
+    quiet_text = json.dumps(quiet) + render_html(quiet)
+    for term in terms:
+        assert term not in quiet_text, f"review-flag term {term!r} leaked"
+
+    # The finding itself must survive: same verdicts, and the flag is still
+    # reported as having fired.
+    assert [c["verdict"] for c in full["controls"]] == [
+        c["verdict"] for c in quiet["controls"]
+    ]
+    quiet_fired = [c for c in quiet["controls"] if c["review_flags_hit"]]
+    assert len(quiet_fired) == len(fired)
