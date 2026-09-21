@@ -32,6 +32,32 @@ def test_stemming_matches_inflections():
     assert idx.matches("review") == ["e1"]
 
 
+def test_stemming_applies_to_every_token_not_just_the_last():
+    """Regression: a phrase whose EARLIER token the stemmer alters must match.
+
+    Found 2026-09-20 on a real corpus. The evidence read "we answer within one
+    business day"; the keyword was "business days". The index stems every
+    token, so the text was held as "busines day", while the keyword stemmed
+    only its last token and stayed "business day". It matched neither the
+    literal text (plural vs singular) nor the stemmed text, and the control
+    came back MISSING against a document that satisfied it.
+    """
+    idx = _index("Support hours: we answer within one business day, and usually sooner.")
+    assert idx.matches("business days") == ["e1"]
+    assert idx.matches("business day") == ["e1"]
+
+
+def test_stemming_does_not_match_an_unrelated_phrase():
+    """Control for the test above: widening recall must not match anything.
+
+    Without this, stemming every token could pass by matching too much, and a
+    green suite would prove nothing.
+    """
+    idx = _index("Support hours: we answer within one business day, and usually sooner.")
+    assert idx.matches("business premises") == []
+    assert idx.matches("calendar days") == []
+
+
 def test_no_match_returns_empty():
     idx = _index("Totally unrelated content about gardening.")
     assert idx.matches("encryption at rest") == []

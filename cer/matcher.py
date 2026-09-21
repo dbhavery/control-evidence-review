@@ -34,10 +34,22 @@ def _stem(token: str) -> str:
 
 
 def _stem_phrase(phrase: str) -> str:
-    tokens = normalize(phrase).split()
-    if not tokens:
-        return ""
-    tokens[-1] = _stem(tokens[-1])
+    """Stem EVERY token, because the index stems every token.
+
+    This used to stem only the last one, which made the stemmed path dead for
+    any phrase whose earlier tokens the stemmer alters. ``EvidenceIndex``
+    builds its stemmed view with ``_stem`` applied to each token, so a policy
+    reading "within one business day" is indexed as "within one busines day".
+    A keyword of "business days" stemmed only on the last token stayed
+    "business day" and matched neither the literal text (plural vs singular)
+    nor the stemmed text ("business" vs "busines"). The requirement came back
+    unmet against a document that plainly satisfied it.
+
+    That is the worst failure this file can have. A false positive is caught by
+    reading the matched excerpt; a false negative shows up as MISSING with no
+    evidence to read, which looks exactly like a real gap.
+    """
+    tokens = [_stem(t) for t in normalize(phrase).split()]
     return " ".join(tokens)
 
 
