@@ -1,18 +1,22 @@
 """Rule engine: turn matched evidence into a per-control verdict.
 
-Verdict rules (deterministic, no randomness):
+Verdict rules (deterministic, no randomness), checked in this order:
 
 * Evaluate each of the control's requirements. A requirement is *met* when at
   least ``min_hits`` distinct keywords match somewhere in the corpus.
-* If NO requirement is met  -> MISSING            (confidence high, it's clearly a gap)
+* Review flags are looked for only in the evidence that matched a met
+  requirement of this control.
+* If the control defines NO requirements -> NEEDS_REVIEW (confidence 0.0).
+* If NO requirement is met -> MISSING (confidence 0.9). Review flags are not
+  consulted, because no evidence matched.
 * If ALL requirements are met -> SATISFIED, UNLESS a review-flag term appears in
   the matched evidence, in which case -> NEEDS_REVIEW.
-* If SOME but not all are met -> PARTIAL.
-* NEEDS_REVIEW also fires when a single requirement scrapes by on exactly one
-  weak keyword hit and the control asked for more scrutiny via review_flags.
+* If SOME but not all are met -> PARTIAL, UNLESS a review-flag term appears in
+  the matched evidence, in which case -> NEEDS_REVIEW.
 
-Confidence = fraction of requirements met, nudged by evidence breadth. It is a
-support signal for the human reviewer, not a probability claim.
+Confidence for SATISFIED and PARTIAL scales with how many requirements and
+keywords matched. It is a support signal for the human reviewer, not a
+probability claim.
 """
 
 from __future__ import annotations
@@ -137,7 +141,7 @@ def _decide(
     if review_hits:
         rationale = (
             f"{met_count}/{total} requirements met and review-flag term(s) "
-            f"{review_hits} present — needs a human decision."
+            f"{review_hits} present; needs a human decision."
         )
         return (Verdict.NEEDS_REVIEW, 0.5, rationale)
 
